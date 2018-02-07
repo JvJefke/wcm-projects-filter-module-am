@@ -1,6 +1,6 @@
-# wcm-boilerplate-module
+# wcm-projects-filter-module-am
 
-[Description]
+This module contains an API that returns filtered projects. This is needed to specific filters that ar not available by the main API.
 
 ## Prerequisites
  - A running implementation of the Pelorus CMS in multitenancy mode is needed either locally or on a server.
