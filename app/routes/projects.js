@@ -12,7 +12,7 @@ const baseUrl = "/" + config.api.prefix + config.api.version + "projects-am";
 
 module.exports = (app) => {
 
-	app.route(baseUrl + "/projects").get(projectsController.filtered);
-	app.route(baseUrl + "/map").get(mapController.filtered);
+	app.route(baseUrl + "/projects").post(projectsController.filtered);
+	app.route(baseUrl + "/map").post(mapController.filtered);
 
 }

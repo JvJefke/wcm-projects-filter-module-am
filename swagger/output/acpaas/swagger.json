@@ -1,1 +1,218 @@
-{}
+{
+	"swagger": "2.0",
+	"info": {
+		"title": "@wcm/projects-filter-am",
+		"version": "0.0.1",
+		"description": "Projects filter module for Antwerpen Morgen"
+	},
+	"paths": {
+		"/projects-am/projects": {
+			"post": {
+				"tags": [
+					"Projects"
+				],
+				"description": "Get filtered projects.",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "query object ",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/ProjectsBodyQuery"
+						}
+					}
+				],
+				"responses": {
+					"400": {
+						"description": "Bad request ",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					},
+					"500": {
+						"description": "Internal server error ",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"Error": {
+			"type": "object",
+			"description": "Error response object",
+			"properties": {
+				"type": {
+					"type": "string",
+					"description": "Link to Error page. "
+				},
+				"title": {
+					"type": "string",
+					"description": "Title of the error. "
+				},
+				"status": {
+					"type": "string",
+					"description": "HTTP status code. "
+				},
+				"identifier": {
+					"type": "string",
+					"description": "Unique ID as logged in the database. "
+				},
+				"code": {
+					"type": "string",
+					"description": "Error type code. "
+				}
+			},
+			"required": [
+				"type",
+				"title",
+				"status",
+				"identifier",
+				"code"
+			]
+		},
+		"ProjectsBodyQuery": {
+			"type": "object",
+			"properties": {
+				"q": {
+					"type": "string",
+					"description": "search query"
+				},
+				"visions": {
+					"type": "array",
+					"description": "Uuid&#39;s of selected visions",
+					"items": {
+						"type": "string"
+					}
+				},
+				"participate": {
+					"type": "boolean",
+					"description": "Defines if only projects should be return that have participations in the future"
+				},
+				"skip": {
+					"type": "number",
+					"description": "items to skip"
+				},
+				"limit": {
+					"type": "number",
+					"description": "items to skip"
+				}
+			},
+			"required": [
+				"q",
+				"visions",
+				"participate"
+			]
+		},
+		"Projects200Query": {
+			"properties": {
+				"_id": {
+					"type": "string",
+					"description": "Mongo _id"
+				},
+				"uuid": {
+					"type": "string",
+					"description": "Content uuid"
+				},
+				"fields": {},
+				"meta": {
+					"$ref": "#/definitions/Projects200Query.meta"
+				}
+			},
+			"required": [
+				"_id",
+				"uuid",
+				"fields",
+				"meta"
+			]
+		},
+		"Projects200Query.meta": {
+			"properties": {
+				"label": {
+					"type": "string",
+					"description": "Content label"
+				},
+				"taxonomy": {
+					"$ref": "#/definitions/Projects200Query.meta.taxonomy"
+				},
+				"created": {
+					"type": "string",
+					"description": "Created at"
+				},
+				"lastModified": {
+					"type": "string",
+					"description": "Last modified at"
+				},
+				"published": {
+					"type": "boolean",
+					"description": "Published"
+				},
+				"hitCount": {
+					"type": "number",
+					"description": "Hit counter"
+				},
+				"activeLanguages": {
+					"type": "array",
+					"description": "Active languages",
+					"items": {}
+				},
+				"contentType": {
+					"type": "string",
+					"description": "Content type"
+				},
+				"safeLabel": {
+					"type": "string",
+					"description": "Safe label"
+				},
+				"deleted": {
+					"type": "boolean",
+					"description": "Deleted"
+				}
+			},
+			"required": [
+				"label",
+				"taxonomy",
+				"created",
+				"lastModified",
+				"published",
+				"hitCount",
+				"activeLanguages",
+				"contentType",
+				"safeLabel",
+				"deleted"
+			]
+		},
+		"Projects200Query.meta.taxonomy": {
+			"properties": {
+				"available": {
+					"type": "array",
+					"description": "Taxonomy available",
+					"items": {}
+				},
+				"dataType": {
+					"type": "string",
+					"description": "Taxonomy data type"
+				},
+				"tags": {
+					"type": "array",
+					"description": "Taxonomy tags",
+					"items": {}
+				}
+			},
+			"required": [
+				"available",
+				"dataType",
+				"tags"
+			]
+		}
+	}
+}
