@@ -6,6 +6,51 @@
 		"description": "Projects filter module for Antwerpen Morgen"
 	},
 	"paths": {
+		"/projects-am/map": {
+			"post": {
+				"tags": [
+					"Map"
+				],
+				"description": "Get filtered projects for the map.",
+				"consumes": [
+					"application/json"
+				],
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"name": "body",
+						"description": "query object ",
+						"required": true,
+						"schema": {
+							"$ref": "#/definitions/MapBodyQuery"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success ",
+						"schema": {
+							"$ref": "#/definitions/Map200Query"
+						}
+					},
+					"400": {
+						"description": "Bad request ",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					},
+					"500": {
+						"description": "Internal server error ",
+						"schema": {
+							"$ref": "#/definitions/Error"
+						}
+					}
+				}
+			}
+		},
 		"/projects-am/projects": {
 			"post": {
 				"tags": [
@@ -30,6 +75,12 @@
 					}
 				],
 				"responses": {
+					"200": {
+						"description": "Success ",
+						"schema": {
+							"$ref": "#/definitions/Projects200Query"
+						}
+					},
 					"400": {
 						"description": "Bad request ",
 						"schema": {
@@ -80,6 +131,104 @@
 				"code"
 			]
 		},
+		"MapBodyQuery": {
+			"type": "object",
+			"properties": {
+				"q": {
+					"type": "string",
+					"description": "search query"
+				},
+				"visions": {
+					"type": "array",
+					"description": "Uuid&#39;s of selected visions",
+					"items": {
+						"type": "string"
+					}
+				},
+				"participate": {
+					"type": "boolean",
+					"description": "Defines if only projects should be return that have participations in the future"
+				},
+				"skip": {
+					"type": "number",
+					"description": "items to skip"
+				},
+				"limit": {
+					"type": "number",
+					"description": "items to skip"
+				}
+			},
+			"required": [
+				"q",
+				"visions",
+				"participate"
+			]
+		},
+		"Map200Query": {
+			"type": "object",
+			"properties": {
+				"result": {
+					"type": "array",
+					"description": "Result",
+					"items": {
+						"$ref": "#/definitions/Map200Query.result"
+					}
+				},
+				"skip": {
+					"type": "number",
+					"description": "Skip"
+				},
+				"limit": {},
+				"total": {}
+			},
+			"required": [
+				"result",
+				"skip",
+				"limit",
+				"total"
+			]
+		},
+		"Map200Query.result": {
+			"properties": {
+				"uuid": {
+					"type": "string",
+					"description": "Project uuid"
+				},
+				"title": {
+					"type": "string",
+					"description": "Project title"
+				},
+				"description": {
+					"type": "string",
+					"description": "Project description"
+				},
+				"thumbnail": {},
+				"geoJSON": {},
+				"related": {
+					"type": "array",
+					"description": "Related projects (uuid)",
+					"items": {
+						"type": "string"
+					}
+				},
+				"childs": {
+					"type": "array",
+					"description": "Child projects (uuid)",
+					"items": {
+						"type": "string"
+					}
+				}
+			},
+			"required": [
+				"uuid",
+				"title",
+				"description",
+				"thumbnail",
+				"geoJSON",
+				"related",
+				"childs"
+			]
+		},
 		"ProjectsBodyQuery": {
 			"type": "object",
 			"properties": {
@@ -114,6 +263,36 @@
 			]
 		},
 		"Projects200Query": {
+			"type": "object",
+			"properties": {
+				"result": {
+					"type": "array",
+					"description": "Success",
+					"items": {
+						"$ref": "#/definitions/Projects200Query.result"
+					}
+				},
+				"skip": {
+					"type": "number",
+					"description": "Skip"
+				},
+				"limit": {
+					"type": "number",
+					"description": "Limit"
+				},
+				"total": {
+					"type": "number",
+					"description": "Total"
+				}
+			},
+			"required": [
+				"result",
+				"skip",
+				"limit",
+				"total"
+			]
+		},
+		"Projects200Query.result": {
 			"properties": {
 				"_id": {
 					"type": "string",
@@ -125,7 +304,7 @@
 				},
 				"fields": {},
 				"meta": {
-					"$ref": "#/definitions/Projects200Query.meta"
+					"$ref": "#/definitions/Projects200Query.result.meta"
 				}
 			},
 			"required": [
@@ -135,14 +314,14 @@
 				"meta"
 			]
 		},
-		"Projects200Query.meta": {
+		"Projects200Query.result.meta": {
 			"properties": {
 				"label": {
 					"type": "string",
 					"description": "Content label"
 				},
 				"taxonomy": {
-					"$ref": "#/definitions/Projects200Query.meta.taxonomy"
+					"$ref": "#/definitions/Projects200Query.result.meta.taxonomy"
 				},
 				"created": {
 					"type": "string",
@@ -191,7 +370,7 @@
 				"deleted"
 			]
 		},
-		"Projects200Query.meta.taxonomy": {
+		"Projects200Query.result.meta.taxonomy": {
 			"properties": {
 				"available": {
 					"type": "array",
